@@ -1,75 +1,168 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Sheetal's Home Food</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sheetal's Home Food</title>
 
-  <!-- Bootstrap -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-  <style>
-    body {
-      background: #f8f9fa;
-    }
+<style>
+body {
+  background: #fffaf0;
+}
 
-    .card {
-      border: none;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    }
+/* HEADER */
+.header {
+  background: #fff3e0;
+  padding: 15px;
+  border-radius: 12px;
+}
 
-    .card img {
-      height: 180px;
-      object-fit: cover;
-    }
+.profile-img {
+  width: 100%;
+  max-width: 90px;
+  border-radius: 50%;
+}
 
-    .price {
-      font-weight: 600;
-    }
+/* CARDS */
+.card {
+  border: none;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
 
-    .qty-btn {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-    }
-  </style>
+.card img {
+  height: 160px;
+  object-fit: cover;
+}
+
+.qty-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
+
+/* SOLD OUT */
+.sold-out {
+  opacity: 0.5;
+}
+
+.sold-text {
+  color: red;
+  font-weight: bold;
+}
+
+/* SECTION TITLE */
+.section-title {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+/* ORDER BOX */
+.order-box {
+  background: white;
+  padding: 15px;
+  border-radius: 12px;
+  margin-top: 20px;
+}
+</style>
 </head>
 
 <body>
 
 <div class="container py-3">
 
-  <h4 class="mb-3">Today's Menu</h4>
+  <!-- HEADER -->
+  <div class="header d-flex align-items-center">
+    <div style="width:30%">
+      <img src="https://via.placeholder.com/100" class="profile-img">
+    </div>
+    <div style="width:70%">
+      <h5 class="mb-1">Sheetal's Home Food</h5>
+      <small>Home-cooked meals in Majiwada, Thane</small>
+    </div>
+  </div>
 
+  <!-- BREAKFAST -->
+  <div class="section-title">Breakfast</div>
   <div class="row g-3">
 
-    <!-- ITEM -->
-    <div class="col-12 col-md-6 col-lg-4">
-      <div class="card">
-        <img src="https://images.unsplash.com/photo-1589301760014-d929f3979dbc" class="w-100">
-        <div class="p-3">
-          <h5 class="mb-1">Idli</h5>
-          <div class="d-flex justify-content-between align-items-center">
-            <span class="price">₹50</span>
+    <div class="col-12 col-md-6">
+      <div class="card p-2" id="item1">
+        <h6>Idli</h6>
+        <img src="https://images.unsplash.com/photo-1589301760014-d929f3979dbc">
+        <small>Soft idli with coconut chutney</small>
 
-            <div class="d-flex align-items-center">
-              <button class="btn btn-light qty-btn">-</button>
-              <span class="mx-2">0</span>
-              <button class="btn btn-dark qty-btn">+</button>
-            </div>
+        <div class="d-flex justify-content-between align-items-center mt-2">
+          <span>₹50</span>
 
+          <div>
+            <button onclick="updateQty('item1', -1)" class="btn btn-light qty-btn">-</button>
+            <span id="qty-item1">0</span>
+            <button onclick="updateQty('item1', 1)" class="btn btn-dark qty-btn">+</button>
           </div>
         </div>
+
+        <small>Delivery: 8–9 AM</small>
       </div>
     </div>
 
-    <!-- COPY ABOVE BLOCK FOR MORE ITEMS -->
+  </div>
+
+  <!-- LUNCH -->
+  <div class="section-title">Lunch</div>
+  <div class="row g-3">
+
+    <div class="col-12 col-md-6">
+      <div class="card p-2" id="item2">
+        <h6>Thali</h6>
+        <img src="https://images.unsplash.com/photo-1604908176997-125f25cc6f3d">
+        <small>4 Roti, Paneer Capsicum Sabji, Toor Dal, Jeera-Ghee Rice</small>
+
+        <div class="d-flex justify-content-between align-items-center mt-2">
+          <span>₹180</span>
+
+          <div>
+            <button onclick="updateQty('item2', -1)" class="btn btn-light qty-btn">-</button>
+            <span id="qty-item2">0</span>
+            <button onclick="updateQty('item2', 1)" class="btn btn-dark qty-btn">+</button>
+          </div>
+        </div>
+
+        <small>Delivery: 2–3 PM</small>
+      </div>
+    </div>
 
   </div>
 
+  <!-- ORDER FORM -->
+  <div class="order-box">
+    <h6>Place Order</h6>
+
+    <input class="form-control mb-2" placeholder="Your Name">
+    <input class="form-control mb-2" placeholder="Phone Number">
+    <textarea class="form-control mb-2" placeholder="Address"></textarea>
+
+    <button class="btn btn-dark w-100">Place Order</button>
+  </div>
+
 </div>
+
+<script>
+let cart = {};
+
+function updateQty(item, change) {
+  if (!cart[item]) cart[item] = 0;
+
+  cart[item] += change;
+
+  if (cart[item] < 0) cart[item] = 0;
+
+  document.getElementById("qty-" + item).innerText = cart[item];
+}
+</script>
 
 </body>
 </html>
