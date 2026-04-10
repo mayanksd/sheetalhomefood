@@ -19,6 +19,19 @@ body {
   border-radius: 12px;
 }
 
+/* BRAND TITLE (shop name styling) */
+.brand-title {
+  font-weight: 800;
+  font-size: 22px;
+  letter-spacing: 0.5px;
+}
+
+/* TAGLINE (subtitle below shop name) */
+.tagline {
+  font-size: 14px;
+  color: #6c757d;
+}
+  
 .profile-img {
   width: 100%;
   max-width: 90px;
@@ -33,16 +46,36 @@ body {
 }
 
 .card img {
-  height: 160px;
+  height: 220px;
   object-fit: cover;
+  border-radius: 12px;
 }
 
+/* QUANTITY BUTTONS (modern + / - buttons) */
 .qty-btn {
-  width: 32px;
-  height: 32px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
 }
 
+.qty-btn.minus {
+  background: #e9ecef;
+}
+
+.qty-btn.plus {
+  background: #212529;
+  color: white;
+}
+
+.qty-btn:active {
+  transform: scale(0.95);
+}
+  
 /* SOLD OUT */
 .sold-out {
   opacity: 0.5;
@@ -80,8 +113,8 @@ body {
       <img src="https://via.placeholder.com/100" class="profile-img">
     </div>
     <div style="width:70%">
-      <h5 class="mb-1">Sheetal's Home Food</h5>
-      <small>Home-cooked meals in Majiwada, Thane</small>
+      <h3 class="mb-1 fw-bold brand-title">Sheetal’s Home Food</h3>
+      <p class="mb-0 tagline">Fresh ghar ka khana, made with love ❤️</p>
     </div>
   </div>
 
@@ -98,10 +131,10 @@ body {
         <div class="d-flex justify-content-between align-items-center mt-2">
           <span>₹50</span>
 
-          <div>
-            <button onclick="updateQty('item1', -1)" class="btn btn-light qty-btn">-</button>
-            <span id="qty-item1">0</span>
-            <button onclick="updateQty('item1', 1)" class="btn btn-dark qty-btn">+</button>
+          <div class="d-flex align-items-center">
+            <button onclick="updateQty('item1', -1)" class="qty-btn minus">−</button>
+            <span id="qty-item1" class="mx-2">0</span>
+            <button onclick="updateQty('item1', 1)" class="qty-btn plus">+</button>
           </div>
         </div>
 
@@ -124,10 +157,10 @@ body {
         <div class="d-flex justify-content-between align-items-center mt-2">
           <span>₹180</span>
 
-          <div>
-            <button onclick="updateQty('item2', -1)" class="btn btn-light qty-btn">-</button>
-            <span id="qty-item2">0</span>
-            <button onclick="updateQty('item2', 1)" class="btn btn-dark qty-btn">+</button>
+          <div class="d-flex align-items-center">
+            <button onclick="updateQty('item1', -1)" class="qty-btn minus">−</button>
+            <span id="qty-item1" class="mx-2">0</span>
+            <button onclick="updateQty('item1', 1)" class="qty-btn plus">+</button>
           </div>
         </div>
 
