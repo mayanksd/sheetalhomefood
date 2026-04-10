@@ -6,10 +6,13 @@
 <title>Sheetal's Home Food</title>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+  
 <style>
+/* GLOBAL FONT */
 body {
   background: #fffaf0;
+  font-family: 'Roboto', sans-serif;
 }
 
 /* HEADER */
@@ -19,16 +22,16 @@ body {
   border-radius: 12px;
 }
 
-/* BRAND TITLE (shop name styling) */
+/* BRAND TITLE (big bold headline) */
 .brand-title {
-  font-weight: 800;
-  font-size: 22px;
-  letter-spacing: 0.5px;
+  font-weight: 900;
+  font-size: 36px;
+  color: #d35400;
 }
 
-/* TAGLINE (subtitle below shop name) */
+/* TAGLINE (bigger, softer) */
 .tagline {
-  font-size: 14px;
+  font-size: 18px;
   color: #6c757d;
 }
   
@@ -46,7 +49,7 @@ body {
 }
 
 .card img {
-  height: 220px;
+  height: 260px;
   object-fit: cover;
   border-radius: 12px;
 }
@@ -84,6 +87,24 @@ body {
 .sold-text {
   color: red;
   font-weight: bold;
+}
+
+/* ITEM TEXT STYLING */
+.card h6 {
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.card small {
+  color: #6c757d;
+  display: block;
+  margin-bottom: 10px;
+}
+
+/* DELIVERY TEXT */
+.delivery-text {
+  margin-top: 10px;
+  font-size: 13px;
 }
 
 /* SECTION TITLE */
@@ -138,7 +159,7 @@ body {
           </div>
         </div>
 
-        <small>Delivery: 8–9 AM</small>
+        <small class="delivery-text">Delivery: 8–9 AM</small>
       </div>
     </div>
 
@@ -164,7 +185,7 @@ body {
           </div>
         </div>
 
-        <small>Delivery: 2–3 PM</small>
+        <small class="delivery-text">Delivery: 2–3 PM</small>
       </div>
     </div>
 
