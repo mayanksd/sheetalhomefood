@@ -130,6 +130,14 @@ body {
   border-radius: 12px;
   margin-top: 20px;
 }
+
+/* ORDER SUMMARY SECTION */
+.order-summary {
+  background: white;
+  padding: 15px;
+  border-radius: 12px;
+  margin-top: 20px;
+}
 </style>
 </head>
 
@@ -200,6 +208,85 @@ body {
 
   </div>
 
+    <!-- Snacks -->
+  <div class="section-title">Evening Snacks</div>
+  <div class="row g-3">
+
+    <div class="col-12 col-md-6">
+      <div class="card p-2" id="item3">
+        <h6>Dhabeli</h6>
+        <img src="https://foodiesterminal.com/wp-content/uploads/2018/11/kutchi-dabeli-recipe-768x1160.jpg">
+        <small class="desc">Spiced potato-stuffed bun, a sweet-tangy Gujarati street snack</small>
+
+        <div class="d-flex justify-content-between align-items-center mt-2">
+          <span>₹60</span>
+
+          <div class="d-flex align-items-center">
+            <button onclick="updateQty('item3', -1)" class="qty-btn minus">−</button>
+            <span id="qty-item3" class="mx-2">0</span>
+            <button onclick="updateQty('item3', 1)" class="qty-btn plus">+</button>
+          </div>
+        </div>
+
+        <small class="delivery-text">Delivery: 5–6 PM</small>
+      </div>
+    </div>
+
+  </div>
+
+      <!-- Dinner -->
+  <div class="section-title">Dinner</div>
+  <div class="row g-3">
+
+    <div class="col-12 col-md-6">
+      <div class="card p-2" id="item3">
+        <h6>Paneer Paratha</h6>
+        <img src="https://www.vegrecipesofindia.com/wp-content/uploads/2021/06/paneer-paratha-recipe-2.jpg">
+        <small class="desc">Medium Spicy grated-paneer stuffed paratha with curd</small>
+
+        <div class="d-flex justify-content-between align-items-center mt-2">
+          <span>₹80</span>
+
+          <div class="d-flex align-items-center">
+            <button onclick="updateQty('item4', -1)" class="qty-btn minus">−</button>
+            <span id="qty-item4" class="mx-2">0</span>
+            <button onclick="updateQty('item4', 1)" class="qty-btn plus">+</button>
+          </div>
+        </div>
+
+        <small class="delivery-text">Delivery: 8–9 PM</small>
+      </div>
+    </div>
+
+  </div>
+  
+<!-- ORDER SUMMARY -->
+<div class="order-summary">
+  <h5 class="mb-3">Your Order</h5>
+
+  <!-- EMPTY STATE -->
+  <div id="empty-cart" class="text-muted">
+    No items added, add items to view them in cart.
+  </div>
+
+  <!-- TABLE -->
+  <table class="table" id="cart-table" style="display:none;">
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th>Price</th>
+        <th>Qty</th>
+      </tr>
+    </thead>
+    <tbody id="cart-body"></tbody>
+    <tfoot>
+      <tr>
+        <th colspan="2">Total</th>
+        <th id="cart-total">₹0</th>
+      </tr>
+    </tfoot>
+  </table>
+</div>
   <!-- ORDER FORM -->
   <div class="order-box">
     <h6>Place Order</h6>
