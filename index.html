@@ -92,7 +92,7 @@ body {
 
 /* ITEM NAME (Idli, Thali etc.) */
 .card h6 {
-  font-size: 28px;
+  font-size: 24px;
   font-weight: 700;
   margin-bottom: 8px;
   color: #4a4a4a;
@@ -103,20 +103,20 @@ body {
   display: block;
   margin-top: 8px;
   margin-bottom: 14px;
-  font-size: 18px;
+  font-size: 14px;
   color: #6c757d;
 }
 
 /* DELIVERY TEXT */
 .delivery-text {
   margin-top: 12px;
-  font-size: 18px;
+  font-size: 16px;
   color: #6c757d;
 }
 
 /* SECTION TITLE (Breakfast, Lunch etc.) */
 .section-title {
-  font-size: 36px;
+  font-size: 32px;
   font-weight: 700;
   margin-top: 24px;
   margin-bottom: 12px;
@@ -161,13 +161,13 @@ body {
   <div class="row g-3">
 
     <div class="col-12 col-md-6">
-      <div class="card p-2" id="item1">
+      <div class="card p-2" id="item1" data-name="Idli" data-price="60">
         <h6>Idli</h6>
         <img src="https://images.unsplash.com/photo-1589301760014-d929f3979dbc">
         <small class="desc">Soft idli with coconut chutney</small>
 
         <div class="d-flex justify-content-between align-items-center mt-2">
-          <span>₹50</span>
+          <span>₹60</span>
 
           <div class="d-flex align-items-center">
             <button onclick="updateQty('item1', -1)" class="qty-btn minus">−</button>
@@ -187,7 +187,7 @@ body {
   <div class="row g-3">
 
     <div class="col-12 col-md-6">
-      <div class="card p-2" id="item2">
+      <div class="card p-2" id="item2" data-name="Thali" data-price="180">
         <h6>Thali</h6>
         <img src="https://images.unsplash.com/photo-1546833999-b9f581a1996d">
         <small class="desc">4 Roti, Paneer Capsicum Sabji, Toor Dal, Jeera-Ghee Rice</small>
@@ -213,7 +213,7 @@ body {
   <div class="row g-3">
 
     <div class="col-12 col-md-6">
-      <div class="card p-2" id="item3">
+      <div class="card p-2" id="item3" data-name="Dhabeli" data-price="60">
         <h6>Dhabeli</h6>
         <img src="https://foodiesterminal.com/wp-content/uploads/2018/11/kutchi-dabeli-recipe-768x1160.jpg">
         <small class="desc">Spiced potato-stuffed bun, a sweet-tangy Gujarati street snack</small>
@@ -239,7 +239,7 @@ body {
   <div class="row g-3">
 
     <div class="col-12 col-md-6">
-      <div class="card p-2" id="item3">
+      <div class="card p-2" id="item4" data-name="Paneer Paratha" data-price="80">
         <h6>Paneer Paratha</h6>
         <img src="https://www.vegrecipesofindia.com/wp-content/uploads/2021/06/paneer-paratha-recipe-2.jpg">
         <small class="desc">Medium Spicy grated-paneer stuffed paratha with curd</small>
@@ -311,6 +311,50 @@ function updateQty(item, change) {
   if (cart[item] < 0) cart[item] = 0;
 
   document.getElementById("qty-" + item).innerText = cart[item];
+
+  updateCartUI();
+}
+
+function updateCartUI() {
+  let cartBody = document.getElementById("cart-body");
+  let cartTable = document.getElementById("cart-table");
+  let emptyCart = document.getElementById("empty-cart");
+
+  let total = 0;
+  let hasItems = false;
+
+  cartBody.innerHTML = "";
+
+  for (let item in cart) {
+    if (cart[item] > 0) {
+      hasItems = true;
+
+      let el = document.getElementById(item);
+      let name = el.dataset.name;
+      let price = parseInt(el.dataset.price);
+      let qty = cart[item];
+
+      cartBody.innerHTML += `
+        <tr>
+          <td>${name}</td>
+          <td>₹${price}</td>
+          <td>${qty}</td>
+        </tr>
+      `;
+
+      total += price * qty;
+    }
+  }
+
+  if (!hasItems) {
+    emptyCart.style.display = "block";
+    cartTable.style.display = "none";
+  } else {
+    emptyCart.style.display = "none";
+    cartTable.style.display = "table";
+  }
+
+  document.getElementById("cart-total").innerText = "₹" + total;
 }
 </script>
 
