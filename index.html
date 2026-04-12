@@ -374,12 +374,36 @@ function placeOrder() {
   let flat = document.getElementById("cust-flat").value.trim();
 
   let responseBox = document.getElementById("order-response");
+  
+	// BASIC EMPTY CHECK
+	if (!name || !phone || !pincode || !society || !flat) {
+	  responseBox.innerHTML = `<div style="color:red;">Please fill all mandatory fields *</div>`;
+	  return;
+	}
 
-  // VALIDATION
-  if (!name || !phone || !pincode || !society || !flat) {
-    responseBox.innerHTML = `<div style="color:red;">Please fill all mandatory fields *</div>`;
-    return;
-  }
+	// PHONE VALIDATION (10 digits)
+	if (!/^\d{10}$/.test(phone)) {
+	  responseBox.innerHTML = `<div style="color:red;">Enter valid 10-digit mobile number</div>`;
+	  return;
+	}
+
+	// PINCODE VALIDATION (6 digits)
+	if (!/^\d{6}$/.test(pincode)) {
+	  responseBox.innerHTML = `<div style="color:red;">Enter valid 6-digit pincode</div>`;
+	  return;
+	}
+
+	// SOCIETY NAME LENGTH
+	if (society.length < 5) {
+	  responseBox.innerHTML = `<div style="color:red;">Enter valid society name (min 5 characters)</div>`;
+	  return;
+	}
+
+	// FLAT DETAILS LENGTH
+	if (flat.length < 3) {
+	  responseBox.innerHTML = `<div style="color:red;">Enter valid flat details</div>`;
+	  return;
+	}
 
   if (pincode !== "400607") {
     responseBox.innerHTML = `<div style="color:red;">Sorry, we are not yet available in your area.</div>`;
@@ -400,7 +424,8 @@ function placeOrder() {
   // SUCCESS
   responseBox.innerHTML = `
     <div style="color:green; font-weight:600;">
-      Order placed successfully! Please complete payment below.
+      Order placed successfully!<br>
+      Please complete payment by scanning the UPI QR code below.
     </div>
     <div class="mt-2">
       <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=upi://pay?pa=test@upi&pn=Sheetal" />
