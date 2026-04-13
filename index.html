@@ -138,6 +138,17 @@ body {
   border-radius: 12px;
   margin-top: 20px;
 }
+
+/* MENU DATE (highlighted banner style) */
+.menu-date {
+  font-size: 22px;
+  font-weight: 700;
+  color: #c0392b; /* warm red */
+  background: #fff3e0;
+  padding: 10px;
+  border-radius: 10px;
+  text-align: center;
+}
 </style>
 </head>
 
@@ -157,7 +168,7 @@ body {
   </div>
 
   <!-- MENU DATE -->
-  <div id="menu-date" class="mt-2 mb-3" style="font-weight:600;"></div>
+  <div id="menu-date" class="menu-date mt-2 mb-3"></div>
 	
   <!-- BREAKFAST -->
   <div class="section-title">Breakfast</div>
@@ -482,7 +493,7 @@ function placeOrder() {
     total
   };
 
-  fetch("https://script.google.com/macros/s/AKfycbyDdVKK3PECMHwRhzGQ3MOZxBFRXmITipM5Fu4DvcLI4DS-3R5dYUvxOTNtmZmeHKoX1Q/exec", {
+  fetch("https://script.google.com/macros/s/AKfycbzxjcu0p9dRocYgs374_KwIN6HEp8K6Mq2SbvS21qzlY_9QsnvWjkGIrJSBne6DpE_r6Q/exec", {
     method: "POST",
     body: JSON.stringify(payload)
   });
