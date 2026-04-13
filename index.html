@@ -308,14 +308,14 @@ body {
     <h5 class="mb-3">Place Order</h5>
 
     <input id="cust-name" class="form-control mb-2" placeholder="Name *">
-    <input id="cust-phone" class="form-control mb-2" placeholder="Phone Number *">
+    <input id="cust-phone" type="tel" class="form-control mb-2" placeholder="Phone Number *">
 
     <input id="cust-pincode" class="form-control mb-2" placeholder="Pincode *">
     <input id="cust-society" class="form-control mb-2" placeholder="Society Name *">
     <input id="cust-flat" class="form-control mb-2" placeholder="Flat / Floor / Wing *">
     <input id="cust-street" class="form-control mb-2" placeholder="Street (optional)">
 
-    <button onclick="placeOrder()" class="btn btn-dark w-100 mt-2">Place Order</button>
+    <button id="order-btn" onclick="placeOrder()" class="btn btn-dark w-100 mt-2">Place Order</button>
 
     <!-- RESPONSE -->
     <div id="order-response" class="mt-3"></div>
@@ -468,22 +468,31 @@ function placeOrder() {
   let flat = document.getElementById("cust-flat").value.trim();
 
   let responseBox = document.getElementById("order-response");
+
+  let orderBtn = document.getElementById("order-btn");
+
+  /* Disable button and show loading message */
+  orderBtn.disabled = true;
+  responseBox.innerHTML = `<div style="color:#555;">Placing your order...</div>`;
   
   /* This block ensures all mandatory fields are filled before proceeding with order placement. */
   if (!name || !phone || !pincode || !society || !flat) {
     responseBox.innerHTML = `<div style="color:red;">Please fill all mandatory fields *</div>`;
+	orderBtn.disabled = false;
     return;
   }
 
   /* This block validates that the phone number entered is exactly 10 digits to prevent invalid contact details. */
   if (!/^\d{10}$/.test(phone)) {
     responseBox.innerHTML = `<div style="color:red;">Enter valid 10-digit mobile number</div>`;
+	orderBtn.disabled = false;
     return;
   }
 
   /* This block validates that the pincode entered is exactly 6 digits to ensure correct delivery area mapping. */
   if (!/^\d{6}$/.test(pincode)) {
     responseBox.innerHTML = `<div style="color:red;">Enter valid 6-digit pincode</div>`;
+	orderBtn.disabled = false;
     return;
   }
 
@@ -496,12 +505,14 @@ function placeOrder() {
   /* This block ensures flat, wing, or floor details are provided sufficiently for accurate delivery. */
   if (flat.length < 3) {
     responseBox.innerHTML = `<div style="color:red;">Enter valid flat details</div>`;
+	orderBtn.disabled = false;
     return;
   }
 
   /* This block restricts ordering to a specific serviceable pincode to maintain hyperlocal delivery scope. */
   if (pincode !== "400607") {
     responseBox.innerHTML = `<div style="color:red;">Sorry, we are not yet available in your area.</div>`;
+	orderBtn.disabled = false;
     return;
   }
 
@@ -513,6 +524,7 @@ function placeOrder() {
 
   if (!hasItems) {
     responseBox.innerHTML = `<div style="color:red;">Please add items before placing order.</div>`;
+	orderBtn.disabled = false;
     return;
   }
 
