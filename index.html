@@ -156,12 +156,15 @@ body {
     </div>
   </div>
 
+  <!-- MENU DATE -->
+  <div id="menu-date" class="mt-2 mb-3" style="font-weight:600;"></div>
+	
   <!-- BREAKFAST -->
   <div class="section-title">Breakfast</div>
   <div class="row g-3">
 
     <div class="col-12 col-md-6">
-      <div class="card p-2" id="item1" data-name="Idli" data-price="60">
+      <div class="card p-2" id="item1" data-name="Idli" data-price="60" data-slot="8-9 AM">
         <h6>Idli</h6>
         <img src="https://images.unsplash.com/photo-1589301760014-d929f3979dbc">
         <small class="desc">Soft idli with coconut chutney</small>
@@ -187,7 +190,7 @@ body {
   <div class="row g-3">
 
     <div class="col-12 col-md-6">
-      <div class="card p-2" id="item2" data-name="Thali" data-price="180">
+      <div class="card p-2" id="item2" data-name="Thali" data-price="180" data-slot="2-3 PM">
         <h6>Thali</h6>
         <img src="https://images.unsplash.com/photo-1546833999-b9f581a1996d">
         <small class="desc">4 Roti, Paneer Capsicum Sabji, Toor Dal, Jeera-Ghee Rice</small>
@@ -213,7 +216,7 @@ body {
   <div class="row g-3">
 
     <div class="col-12 col-md-6">
-      <div class="card p-2" id="item3" data-name="Dhabeli" data-price="60">
+      <div class="card p-2" id="item3" data-name="Dhabeli" data-price="60" data-slot="5-6 PM">
         <h6>Dhabeli</h6>
         <img src="https://foodiesterminal.com/wp-content/uploads/2018/11/kutchi-dabeli-recipe-768x1160.jpg">
         <small class="desc">Spiced potato-stuffed bun, a sweet-tangy Gujarati street snack</small>
@@ -239,7 +242,7 @@ body {
   <div class="row g-3">
 
     <div class="col-12 col-md-6">
-      <div class="card p-2" id="item4" data-name="Paneer Paratha" data-price="80">
+      <div class="card p-2" id="item4" data-name="Paneer Paratha" data-price="80" data-slot="8-9 PM">
         <h6>Paneer Paratha</h6>
         <img src="https://www.vegrecipesofindia.com/wp-content/uploads/2021/06/paneer-paratha-recipe-2.jpg">
         <small class="desc">Medium Spicy grated-paneer stuffed paratha with curd</small>
@@ -310,6 +313,35 @@ body {
 </div>
 
 <script>
+
+function getDeliveryDate() {
+  let now = new Date();
+  let istTime = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
+
+  if (istTime.getHours() < 20) {
+    return istTime;
+  } else {
+    let tomorrow = new Date(istTime);
+    tomorrow.setDate(istTime.getDate() + 1);
+    return tomorrow;
+  }
+}
+
+function formatDate(date) {
+  return date.toLocaleDateString("en-IN", {
+    day: "numeric",
+    month: "long"
+  });
+}
+
+let deliveryDateObj = getDeliveryDate();
+let deliveryDateStr = formatDate(deliveryDateObj);
+
+window.onload = function () {
+  document.getElementById("menu-date").innerText =
+    deliveryDateStr + " Menu";
+};
+	
 let cart = {};
 
 function updateQty(item, change) {
@@ -421,7 +453,41 @@ function placeOrder() {
     return;
   }
 
-  // SUCCESS
+  let orderItems = [];
+  let total = 0;
+
+  for (let item in cart) {
+    if (cart[item] > 0) {
+      let el = document.getElementById(item);
+      let price = parseInt(el.dataset.price);
+
+      orderItems.push({
+        name: el.dataset.name,
+        qty: cart[item],
+        slot: el.dataset.slot
+      });
+
+      total += price * cart[item];
+    }
+  }
+
+  let payload = {
+    name,
+    phone,
+    pincode,
+    society,
+    flat,
+    deliveryDate: deliveryDateStr,
+    items: orderItems,
+    total
+  };
+
+  fetch("https://script.google.com/macros/s/AKfycbyDdVKK3PECMHwRhzGQ3MOZxBFRXmITipM5Fu4DvcLI4DS-3R5dYUvxOTNtmZmeHKoX1Q/exec", {
+    method: "POST",
+    body: JSON.stringify(payload)
+  });
+	
+// SUCCESS
   responseBox.innerHTML = `
     <div style="color:green; font-weight:600;">
       Order placed successfully!<br>
