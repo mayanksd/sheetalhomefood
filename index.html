@@ -36,11 +36,13 @@ body {
   font-size: 18px;
   color: #7a6a5a; /* muted brown-grey */
 }
-  
+
 .profile-img {
-  width: 100%;
-  max-width: 90px;
-  border-radius: 50%;
+  width: 90px; /* fixed size for consistency */
+  height: 90px; /* same as width = perfect circle */
+  border-radius: 50%; /* makes it circular */
+  object-fit: cover; /* ensures face fits nicely */
+  border: 2px solid #ffffff; /* clean white border */
 }
 
 /* CARDS */
@@ -163,7 +165,7 @@ body {
   <!-- HEADER -->
   <div class="header d-flex align-items-center">
     <div style="width:30%">
-      <img src="https://via.placeholder.com/100" class="profile-img">
+      <img src="https://raw.githubusercontent.com/mayanksd/sheetalhomefood/refs/heads/main/sheetal_image.png" class="profile-img">
     </div>
     <div style="width:70%">
       <h3 class="mb-1 fw-bold brand-title">Sheetal’s Home Food</h3>
