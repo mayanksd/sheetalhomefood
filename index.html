@@ -454,6 +454,16 @@ function markOutOfStock(el) {
 
 /* This function iterates through all menu items on the page and applies time-based out-of-stock rules to each item. */
 function checkTimeBasedOOS() {
+  let today = new Date();
+  let istToday = new Date(today.toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
+
+  let todayStr = formatDate(istToday);
+
+  /* If ordering for future date, skip OOS */
+  if (deliveryDateStr !== todayStr) {
+    return;
+  }
+
   let items = document.querySelectorAll(".card");
 
   items.forEach(el => {
