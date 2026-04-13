@@ -338,6 +338,7 @@ function getDeliveryDate() {
   }
 }
 
+	
 function formatDate(date) {
   return date.toLocaleDateString("en-IN", {
     day: "numeric",
@@ -351,8 +352,10 @@ let deliveryDateStr = formatDate(deliveryDateObj);
 window.onload = function () {
   document.getElementById("menu-date").innerText =
     deliveryDateStr + " Menu";
+
+  checkTimeBasedOOS();
 };
-	
+
 let cart = {};
 
 function updateQty(item, change) {
@@ -409,6 +412,44 @@ function updateCartUI() {
   document.getElementById("cart-total").innerText = "₹" + total;
 }
 
+function isItemExpired(slot) {
+  let now = new Date();
+  let ist = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
+  let hour = ist.getHours();
+
+  if (slot === "8-9 AM" && hour >= 8) return true;
+  if (slot === "2-3 PM" && hour >= 13) return true;
+  if (slot === "5-6 PM" && hour >= 17) return true;
+  if (slot === "8-9 PM" && hour >= 20) return true;
+
+  return false;
+}
+
+function markOutOfStock(el) {
+  el.classList.add("sold-out");
+
+  let plusBtn = el.querySelector(".plus");
+  if (plusBtn) plusBtn.disabled = true;
+
+  let text = document.createElement("div");
+  text.innerText = "Sold Out";
+  text.className = "sold-text";
+
+  el.appendChild(text);
+}
+
+function checkTimeBasedOOS() {
+  let items = document.querySelectorAll(".card");
+
+  items.forEach(el => {
+    let slot = el.dataset.slot;
+
+    if (isItemExpired(slot)) {
+      markOutOfStock(el);
+    }
+  });
+}
+	
 function placeOrder() {
   let name = document.getElementById("cust-name").value.trim();
   let phone = document.getElementById("cust-phone").value.trim();
