@@ -325,6 +325,7 @@ body {
 
 <script>
 
+/* This function determines the correct delivery date based on current IST time, switching to next day after 8 PM so that orders after cutoff are assigned to the next day. */
 function getDeliveryDate() {
   let now = new Date();
   let istTime = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
@@ -338,7 +339,7 @@ function getDeliveryDate() {
   }
 }
 
-	
+/* This function formats a given date into a readable "13 April" format so customers clearly know which day they are ordering for. */
 function formatDate(date) {
   return date.toLocaleDateString("en-IN", {
     day: "numeric",
@@ -346,9 +347,11 @@ function formatDate(date) {
   });
 }
 
+/* These variables compute and store the delivery date once so that it can be reused across UI display and order submission without recalculating. */
 let deliveryDateObj = getDeliveryDate();
 let deliveryDateStr = formatDate(deliveryDateObj);
 
+/* This function runs only after the full page and DOM are loaded, ensuring all menu items exist before applying date display and out-of-stock logic. */
 window.onload = function () {
   document.getElementById("menu-date").innerText =
     deliveryDateStr + " Menu";
@@ -356,8 +359,10 @@ window.onload = function () {
   checkTimeBasedOOS();
 };
 
+/* This object acts as an in-memory cart that tracks how many units of each item the user has selected. */
 let cart = {};
 
+/* This function updates the quantity of a specific item in the cart when the user clicks + or -, and then refreshes the UI accordingly. */
 function updateQty(item, change) {
   if (!cart[item]) cart[item] = 0;
 
@@ -370,6 +375,7 @@ function updateQty(item, change) {
   updateCartUI();
 }
 
+/* This function rebuilds the order summary section by looping through cart items, updating rows, calculating total price, and handling empty cart state. */
 function updateCartUI() {
   let cartBody = document.getElementById("cart-body");
   let cartTable = document.getElementById("cart-table");
@@ -412,6 +418,7 @@ function updateCartUI() {
   document.getElementById("cart-total").innerText = "₹" + total;
 }
 
+/* This function checks whether a menu item should be considered expired based on its delivery time slot and current IST hour. */
 function isItemExpired(slot) {
   let now = new Date();
   let ist = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
@@ -425,6 +432,7 @@ function isItemExpired(slot) {
   return false;
 }
 
+/* This function visually marks an item as out of stock by greying it out, disabling interaction, and appending a clear "Sold Out" label for the user. */
 function markOutOfStock(el) {
   el.classList.add("sold-out");
 
@@ -438,6 +446,7 @@ function markOutOfStock(el) {
   el.appendChild(text);
 }
 
+/* This function iterates through all menu items on the page and applies time-based out-of-stock rules to each item. */
 function checkTimeBasedOOS() {
   let items = document.querySelectorAll(".card");
 
@@ -449,7 +458,8 @@ function checkTimeBasedOOS() {
     }
   });
 }
-	
+
+/* This function validates all user inputs, ensures the cart has items, constructs the order payload, sends it to Google Sheets, and displays a confirmation with payment instructions. */
 function placeOrder() {
   let name = document.getElementById("cust-name").value.trim();
   let phone = document.getElementById("cust-phone").value.trim();
@@ -459,42 +469,43 @@ function placeOrder() {
 
   let responseBox = document.getElementById("order-response");
   
-	// BASIC EMPTY CHECK
-	if (!name || !phone || !pincode || !society || !flat) {
-	  responseBox.innerHTML = `<div style="color:red;">Please fill all mandatory fields *</div>`;
-	  return;
-	}
+  /* This block ensures all mandatory fields are filled before proceeding with order placement. */
+  if (!name || !phone || !pincode || !society || !flat) {
+    responseBox.innerHTML = `<div style="color:red;">Please fill all mandatory fields *</div>`;
+    return;
+  }
 
-	// PHONE VALIDATION (10 digits)
-	if (!/^\d{10}$/.test(phone)) {
-	  responseBox.innerHTML = `<div style="color:red;">Enter valid 10-digit mobile number</div>`;
-	  return;
-	}
+  /* This block validates that the phone number entered is exactly 10 digits to prevent invalid contact details. */
+  if (!/^\d{10}$/.test(phone)) {
+    responseBox.innerHTML = `<div style="color:red;">Enter valid 10-digit mobile number</div>`;
+    return;
+  }
 
-	// PINCODE VALIDATION (6 digits)
-	if (!/^\d{6}$/.test(pincode)) {
-	  responseBox.innerHTML = `<div style="color:red;">Enter valid 6-digit pincode</div>`;
-	  return;
-	}
+  /* This block validates that the pincode entered is exactly 6 digits to ensure correct delivery area mapping. */
+  if (!/^\d{6}$/.test(pincode)) {
+    responseBox.innerHTML = `<div style="color:red;">Enter valid 6-digit pincode</div>`;
+    return;
+  }
 
-	// SOCIETY NAME LENGTH
-	if (society.length < 5) {
-	  responseBox.innerHTML = `<div style="color:red;">Enter valid society name (min 5 characters)</div>`;
-	  return;
-	}
+  /* This block ensures the society name is meaningful and not too short for delivery identification. */
+  if (society.length < 5) {
+    responseBox.innerHTML = `<div style="color:red;">Enter valid society name (min 5 characters)</div>`;
+    return;
+  }
 
-	// FLAT DETAILS LENGTH
-	if (flat.length < 3) {
-	  responseBox.innerHTML = `<div style="color:red;">Enter valid flat details</div>`;
-	  return;
-	}
+  /* This block ensures flat, wing, or floor details are provided sufficiently for accurate delivery. */
+  if (flat.length < 3) {
+    responseBox.innerHTML = `<div style="color:red;">Enter valid flat details</div>`;
+    return;
+  }
 
+  /* This block restricts ordering to a specific serviceable pincode to maintain hyperlocal delivery scope. */
   if (pincode !== "400607") {
     responseBox.innerHTML = `<div style="color:red;">Sorry, we are not yet available in your area.</div>`;
     return;
   }
 
-  // CHECK CART
+  /* This block ensures that at least one item is added to the cart before allowing order placement. */
   let hasItems = false;
   for (let item in cart) {
     if (cart[item] > 0) hasItems = true;
@@ -505,6 +516,7 @@ function placeOrder() {
     return;
   }
 
+  /* This block converts the cart into a structured list of items and calculates the total order value. */
   let orderItems = [];
   let total = 0;
 
@@ -523,6 +535,7 @@ function placeOrder() {
     }
   }
 
+  /* This object represents the final payload that will be sent to Google Sheets for storage and processing. */
   let payload = {
     name,
     phone,
@@ -534,12 +547,13 @@ function placeOrder() {
     total
   };
 
+  /* This API call sends the order data to Google Apps Script, which writes it into the Google Sheet backend. */
   fetch("https://script.google.com/macros/s/AKfycbzxjcu0p9dRocYgs374_KwIN6HEp8K6Mq2SbvS21qzlY_9QsnvWjkGIrJSBne6DpE_r6Q/exec", {
     method: "POST",
     body: JSON.stringify(payload)
   });
 	
-// SUCCESS
+  /* This block updates the UI to confirm order placement and displays a QR code for the user to complete payment. */
   responseBox.innerHTML = `
     <div style="color:green; font-weight:600;">
       Order placed successfully!<br>
